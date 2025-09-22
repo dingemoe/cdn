@@ -1,87 +1,15 @@
-const el = (s) => document.querySelector(s);
-const els = (s) => document.querySelectorAll(s);
-
-const KEY = "glass-table-v1";
-const WIDTHS_KEY = "glass-table-widths-v1";
-
+import { el, els } from "./js/utils/dom.js";
+import { debounce } from "./js/utils/debounce.js";
+import { data, colWidths, currentRel, currentFilter, blankData, load, save, loadWidths, saveWidths } from "./js/data/data.js";
+import { updateRelDataList, handleUrlParameter, hideContextMenu } from "./js/ui/ui.js";
 const theadRow = el("#thead-row");
 const tbody = el("#tbody");
 const newRowInput = el("#new-row-input");
 const relDataList = el("#rel-names");
 const contextMenu = el("#context-menu");
 const deleteRowItem = el("#delete-row-item");
-
-let data = { headers: [], rows: [] };
-let colWidths = {};
-let currentRel = null;
-let currentFilter = "not-done";
-
-function blankData() {
-  return { headers: ["done", "Kolonne 1", "Kolonne 2", "Kolonne 3", "Rel"], rows: [] };
-}
-
-// Debounce utilities
-function debounce(fn, ms) {
-  let t;
-  return (...args) => {
-    clearTimeout(t);
-    t = setTimeout(() => fn(...args), ms);
-  };
-}
-async function load() {
-  try {
-    const r = await fetch("/api/data");
-    if (!r.ok) return blankData();
-    const raw = await r.json();
-    if (!raw || !raw.headers || !raw.rows) return blankData();
-    return raw;
-  } catch { return blankData(); }
-}
-async function save() {
-  try {
-    await fetch("/api/data", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(data),
-    });
-  } catch {}
-}
 const saveDebounced = debounce(save, 300);
-
-async function loadWidths() {
-  try {
-    const r = await fetch("/api/widths");
-    if (!r.ok) return {};
-    return (await r.json()) || {};
-  } catch { return {}; }
-}
-async function saveWidths() {
-  try {
-    await fetch("/api/widths", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(colWidths),
-    });
-  } catch {}
-}
 const saveWidthsDebounced = debounce(saveWidths, 300);
-
-function updateRelDataList() {
-  const relIndex = data.headers.indexOf("Rel");
-  if (relIndex === -1) return;
-  const set = new Set();
-  for (const row of data.rows) {
-    const v = row[relIndex];
-    if (v) set.add(String(v));
-  }
-  relDataList.innerHTML = Array.from(set).map((rel) => '<option value="' + rel.replace(/"/g, "&quot;") + '"></option>').join("");
-}
-
-function handleUrlParameter() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const relName = urlParams.get("rel");
-  if (relName) currentRel = relName;
-}
 
 function addRow(value = "") {
   const len = data.headers.length;
@@ -134,9 +62,7 @@ function makeResizable(th, headerIndex) {
   th.appendChild(resizer);
 }
 
-function hideContextMenu() {
-  contextMenu.style.display = "none";
-}
+
 
 function render() {
   // HEAD
@@ -167,7 +93,7 @@ function render() {
     theadRow.appendChild(th);
   });
 
-  updateRelDataList();
+  updateRelDataList(relDataList);
 
   // BODY
   tbody.innerHTML = "";
@@ -296,10 +222,10 @@ function initEvents() {
   
   // Lukk context-meny ved klikk utenfor eller Escape
   window.addEventListener("click", (e) => {
-    if (!contextMenu.contains(e.target)) hideContextMenu();
+  if (!contextMenu.contains(e.target)) hideContextMenu(contextMenu);
   });
   window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") hideContextMenu();
+  if (e.key === "Escape") hideContextMenu(contextMenu);
   });
 
   deleteRowItem.addEventListener("click", () => {
