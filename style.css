@@ -1,3 +1,25 @@
+/* Slett-knapp kolonne */
+.delete-col-cell {
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px;
+  text-align: center;
+}
+.delete-row-btn {
+  background: #e11d48;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(225,29,72,0.12);
+}
+.delete-row-btn:hover {
+  background: #be123c;
+  box-shadow: 0 4px 16px rgba(225,29,72,0.18);
+}
 /* Animasjon for rad som sjekkes ut */
 .row-checked-anim {
   animation: rowSlideFadeOut 0.5s forwards cubic-bezier(0.4,0.2,0.2,1);

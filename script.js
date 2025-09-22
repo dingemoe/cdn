@@ -1,3 +1,5 @@
+// Sist redigert: 2025-09-22 / Fil: script.js
+console.log('Sist redigert: 2025-09-22 / Fil: script.js');
 import { el, els } from "./js/utils/dom.js";
 import { debounce } from "./js/utils/debounce.js";
 import { data, colWidths, currentRel, currentFilter, blankData, load, save, loadWidths, saveWidths } from "./js/data/data.js";
@@ -157,10 +159,10 @@ function render() {
         }
       }
     });
-    
     tdDone.appendChild(cb);
     tr.appendChild(tdDone);
 
+    let relColIdx = -1;
     row.forEach((cell, cIdx) => {
       if (data.headers[cIdx] === "done") return;
       const td = document.createElement("td");
@@ -168,7 +170,8 @@ function render() {
       if (colWidths[cIdx]) td.style.width = colWidths[cIdx] + "px";
 
       const headerName = data.headers[cIdx];
-      
+      if (headerName === "Rel") relColIdx = cIdx;
+
       if (headerName === "Rel") {
           td.classList.add("rel-chip-container");
           td.innerHTML = `
@@ -216,6 +219,24 @@ function render() {
 
       tr.appendChild(td);
     });
+
+    // Legg til slett-knapp etter Rel-kolonnen
+    const tdDelete = document.createElement("td");
+    tdDelete.className = "delete-col-cell";
+    const delBtn = document.createElement("button");
+    delBtn.className = "delete-row-btn";
+    delBtn.textContent = "Slett";
+    delBtn.addEventListener("click", () => {
+      const idx = data.rows.indexOf(row);
+      if (idx !== -1) {
+        data.rows.splice(idx, 1);
+        saveDebounced();
+        render();
+      }
+    });
+    tdDelete.appendChild(delBtn);
+    tr.appendChild(tdDelete);
+
     tbody.appendChild(tr);
   });
 }
