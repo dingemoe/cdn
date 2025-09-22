@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Glass Table</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="wrapper" id="app">
+    <div class="content">
+      <div class="table-shell">
+        <div class="table-scroll-body">
+          <table id="t">
+            <thead><tr id="thead-row"></tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="new-row-input-container">
+        <input type="text" id="new-row-input" class="new-row-input" placeholder="Ny rad, fyll inn Kolonne 1..." />
+        <button class="accent2" id="add-row">+ Ny rad</button>
+      </div>
+      <div class="tabs-container">
+        <button class="tab-btn active" data-filter="not-done">Ikke utførte</button>
+        <button class="tab-btn" data-filter="done">Utførte</button>
+        <button class="tab-btn" data-filter="all">Alle</button>
+      </div>
+    </div>
+  </div>
+  <datalist id="rel-names"></datalist>
+  <div id="context-menu" class="context-menu" style="display: none;">
+    <div class="context-menu-item" id="delete-row-item">Slett rad</div>
+  </div>
+  <script type="module" src="/js/script.js"></script>
+</body>
+</html>
