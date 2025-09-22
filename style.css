@@ -1,3 +1,22 @@
+/* Animasjon for rad som sjekkes ut */
+.row-checked-anim {
+  animation: rowSlideFadeOut 0.5s forwards cubic-bezier(0.4,0.2,0.2,1);
+}
+@keyframes rowSlideFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  60% {
+    opacity: 0.7;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(80px) scaleY(0.7);
+    height: 0;
+  }
+}
 :root {
   --bg: #0b0f14;
   --bg2: #0f141b;

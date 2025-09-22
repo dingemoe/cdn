@@ -139,9 +139,22 @@ function render() {
     }
     cb.addEventListener("change", () => {
       if (doneIdx !== -1) {
-          row[doneIdx] = cb.checked;
-          saveDebounced();
-          render(); 
+        row[doneIdx] = cb.checked;
+        saveDebounced();
+        if (cb.checked) {
+          // Finn tr-elementet og legg til animasjonsklasse
+          const tr = cb.closest('tr');
+          if (tr) {
+            tr.classList.add('row-checked-anim');
+            setTimeout(() => {
+              render();
+            }, 500); // matcher CSS-animasjon
+          } else {
+            render();
+          }
+        } else {
+          render();
+        }
       }
     });
     
